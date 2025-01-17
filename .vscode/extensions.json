@@ -1,0 +1,12 @@
+{
+    "recommendations": [
+        "meganrogge.template-string-converter",
+        "austenc.tailwind-docs",
+        "bradlc.vscode-tailwindcss",
+        "esbenp.prettier-vscode",
+        "ms-vscode.vscode-typescript-next",
+        "dbaeumer.vscode-eslint",
+        "wallabyjs.console-ninja",
+        "formulahendry.auto-rename-tag"
+    ]
+}
