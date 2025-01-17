@@ -9,7 +9,7 @@ export interface Empresa {
   estado: boolean;
 }
 
-export const obtenerEmpresas = async (
+export const obtenerEmpresasPaginated = async (
   page = 0,
   size = 10,
   sortBy = "nombre",
@@ -18,6 +18,13 @@ export const obtenerEmpresas = async (
   const response = await api.get("/empresas", {
     params: { page, size, sortBy, sortDirection },
   });
+  return response.data;
+};
+
+export const obtenerEmpresas = async (): Promise<
+  PaginatedResponse<Empresa>
+> => {
+  const response = await api.get("/empresas");
   return response.data;
 };
 

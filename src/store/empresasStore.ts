@@ -1,8 +1,6 @@
-// Archivo: empresasStore.ts
-
 import create from "zustand";
 import { devtools } from "zustand/middleware";
-import { obtenerEmpresas } from "@/services/empresas";
+import { obtenerEmpresas, obtenerEmpresasPaginated } from "@/services/empresas";
 
 interface Empresa {
   id: string;
@@ -19,7 +17,8 @@ interface EmpresasState {
   loading: boolean;
   page: number;
   setPage: (page: number) => void;
-  fetchEmpresas: (
+  fetchEmpresas: () => Promise<void>;
+  fetchEmpresasPaginated: (
     page: number,
     size: number,
     sort: string,
@@ -34,10 +33,26 @@ export const useEmpresasStore = create<EmpresasState>()(
     loading: false,
     page: 0,
     setPage: (page) => set({ page }),
-    fetchEmpresas: async (page, size, sort, order) => {
+    fetchEmpresas: async () => {
       set({ loading: true });
       try {
-        const data = await obtenerEmpresas(page, size, sort, order);
+        const data = await obtenerEmpresas();
+        set({ empresas: data.content, totalPages: data.totalPages });
+      } catch (error) {
+        console.error("Error fetching empresas:", error);
+      } finally {
+        set({ loading: false });
+      }
+    },
+    fetchEmpresasPaginated: async (
+      page: number,
+      size: number,
+      sort: string,
+      order: string
+    ) => {
+      set({ loading: true });
+      try {
+        const data = await obtenerEmpresasPaginated(page, size, sort, order);
         set({ empresas: data.content, totalPages: data.totalPages });
       } catch (error) {
         console.error("Error fetching empresas:", error);

@@ -10,7 +10,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useAuthStore } from "@/context/store/authStore";
+import { useAuthStore } from "@/store/authStore";
 import { useRouter } from "next/navigation";
 
 export function Navbar({ children, className }: { children?: React.ReactNode, className?: string }) {

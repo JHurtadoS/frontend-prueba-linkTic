@@ -22,6 +22,19 @@ export const obtenerProductos = async (
   return response.data;
 };
 
+export const obtenerProductosPorEmpresa = async (
+  empresaId: string,
+  page = 0,
+  size = 10,
+  sortBy = "nombre",
+  sortDirection = "asc"
+): Promise<PaginatedResponse<Producto>> => {
+  const response = await api.get(`/productos/empresa/${empresaId}`, {
+    params: { page, size, sortBy, sortDirection },
+  });
+  return response.data;
+};
+
 export const crearProducto = async (
   producto: Omit<Producto, "id" | "estado">
 ): Promise<{ message: string; id: string }> => {

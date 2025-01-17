@@ -1,9 +1,7 @@
-// middleware.ts
 import { NextResponse } from "next/server";
 import { jwtVerify } from "jose";
 import type { NextRequest } from "next/server";
 
-// Convertir la clave secreta desde Base64
 const SECRET_KEY = Buffer.from(process.env.JWT_SECRET!, "base64");
 
 export async function middleware(request: NextRequest) {
@@ -13,6 +11,10 @@ export async function middleware(request: NextRequest) {
   const publicRoutes = ["/login"];
   const adminRoutes = ["/empresas/admin", "/inventario", "/ordenes"];
 
+  if (pathname === "/") {
+    return NextResponse.redirect(new URL("/login", request.url));
+  }
+
   if (!token && !publicRoutes.includes(pathname)) {
     console.log(token);
     return NextResponse.redirect(new URL("/login", request.url));
@@ -20,7 +22,6 @@ export async function middleware(request: NextRequest) {
 
   if (token) {
     try {
-      // Verificar el token con la clave secreta
       const { payload } = await jwtVerify(token, SECRET_KEY, {
         algorithms: ["HS256"],
       });
@@ -28,7 +29,7 @@ export async function middleware(request: NextRequest) {
       console.log(payload);
 
       const isAdmin = payload.isAdmin;
-      const email = payload.sub; // Campo estándar 'sub'
+      const email = payload.sub;
 
       if (isAdmin && pathname === "/empresas") {
         return NextResponse.redirect(new URL("/empresas/admin", request.url));
@@ -38,7 +39,6 @@ export async function middleware(request: NextRequest) {
         return NextResponse.redirect(new URL("/empresas", request.url));
       }
 
-      // Pasar datos adicionales en headers (opcional)
       request.headers.set("x-user-email", email as string);
       request.headers.set("x-user-role", isAdmin ? "admin" : "externo");
     } catch (err) {
