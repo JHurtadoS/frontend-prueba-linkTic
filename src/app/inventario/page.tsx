@@ -31,7 +31,7 @@ export default function Inventario() {
     }, [])
 
 
-    const fetchProductos = async () => {
+    const fetchProductos = React.useCallback(async () => {
         setLoading(true);
         try {
             let data;
@@ -49,11 +49,11 @@ export default function Inventario() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [actualEmpresa, actualCategoria, currentPage, rowsPerPage]);
 
     useEffect(() => {
         fetchProductos();
-    }, [currentPage, rowsPerPage, actualEmpresa, actualCategoria]);
+    }, [currentPage, rowsPerPage, actualEmpresa, actualCategoria, fetchProductos]);
 
 
     console.log(productos)
